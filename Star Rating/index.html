@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <title>Laptop Ratings</title>
+
+    <style>
+        .stars-outer {
+            position: relative;
+            display: inline-block;
+        }
+
+        .stars-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+        }
+
+        .stars-outer::before {
+            content: "\f005 \f005 \f005 \f005 \f005";
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: #ccc;
+        }
+
+        .stars-inner::before {
+            content: "\f005 \f005 \f005 \f005 \f005";
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: #f8ce0b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <H1 class="text-center p-2" >Rate The Best Laptops</H1>
+        <div class="form-group">
+            <select id="product-select" class="form-control custom-select">
+                <option value="0" disabled selected>Select 
+                Product</option>
+                <option value="hp">HP Spectator x360</option>
+                <option value="dell">Dell Vostro 1431</option>
+                <option value="acer">Acere 341 x360</option>
+                <option value="windows">Windows Series x360</option>
+                <option value="mac">Mac Series</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="number" id="rating-control"
+            class="form-control" step="0.1" max="5" placeholder="Rate 1-5"
+            disabled>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Laptop</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="hp">
+                    <td>HP Spectator x360</td>
+                    <td>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                        <span class="number-rating"></span>
+                    </td>
+                </tr>
+                <tr class="dell">
+                    <td>Dell Vostro 1431</td>
+                    <td>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                        <span class="number-rating"></span>
+                    </td>
+                </tr>
+                <tr class="acer">
+                    <td>Acer 341</td>
+                    <td>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                        <span class="number-rating"></span>
+                    </td>
+                </tr>
+                <tr class="windows">
+                    <td>Windows series</td>
+                    <td>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                        <span class="number-rating"></span>
+                    </td>
+                </tr>
+                <tr class="mac">
+                    <td>Mac Series</td>
+                    <td>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                        <span class="number-rating"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Initial Ratings
+        const ratings = {
+            hp: 4.7,
+            dell: 3.4,
+            acer: 2.4,
+            windows: 3.6,
+            mac: 2.1
+        }
+
+        // Total Stars
+        const starsTotal = 5;
+
+        // Run getRatings wheN DOM loads
+        document.addEventListener('DOMContentLoaded', getRatings);
+
+        // Form Elements
+        const productSelect = document.getElementById('product-select');
+        const ratingControl = document.getElementById('rating-control');
+
+        // Init Product 
+        let product;
+
+        // Product select change
+        productSelect.addEventListener('change', (e) => {
+            product = e.target.value;
+            // Enable rating control
+            ratingControl.disabled = false;
+            ratingControl.value = ratings[product];
+        });
+
+        // Rating Control change
+        ratingControl.addEventListener('blur', (e) => {
+            const rating = e.target.value;
+
+            // Make sure 5 or under
+            if(rating > 5) {
+                alert('Please rate 1 -5');
+                return;
+            }
+
+            // Change rating
+            ratings[product] = rating;
+
+            getRatings();
+        });
+
+
+        // Get Rating
+        function getRatings() {
+            for (let rating in ratings) {
+                // Get Percentage
+                const starPercentage = (ratings[rating] / 
+                starsTotal) * 100;
+
+                // Round to nearest 10
+                const starPercentageRounded = `${Math.round
+                (starPercentage / 10) * 10}%`;
+
+                // Set width of stars-inner to percentage
+                document.querySelector(`.${rating}
+                .stars-inner`).style.width = starPercentageRounded;
+
+                // Add number rating
+                document.querySelector(`.${rating}
+                .number-rating`).innerHTML = ratings[rating];
+            }
+        }
+
+
+
+    </script>
+</body>
+</html>
